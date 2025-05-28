@@ -84,31 +84,33 @@ function turnHoursToMinutes(moviesArray) {
   });
 }
 
-
 // BONUS - Iteration 8: Best yearly score average - Best yearly score average
 function bestYearAvg(moviesArray) {
-  const grouped = {}; // define the object to group scores by year
-  let highestAvg = 0;
-  for (const movie of movies) {
+  if (moviesArray.length === 0) {
+    return null;
+  }
+  const grouped = {};
+  for (const movie of moviesArray) {
     const { year, score } = movie;
-    if (typeof score !== 'number') continue; // skip if score is missing or invalid
+    if (typeof score !== 'number') continue;
     if (!grouped[year]) {
-      grouped[year] = []; // initialize the array for this year
+      grouped[year] = [];
     }
-    grouped[year].push(score); // add the score to the right year
+    grouped[year].push(score);
   }
+  let bestYear = null;
+  let highestAvg = 0;
   for (const year in grouped) {
-    const avg =
-      grouped[year].reduce((acc, sum) => acc + sum, 0) / grouped[year].length;
-    grouped[year] = avg;
-  }
-  for (const year in grouped) {
-    if (year > highestAvg) {
-      highestAvg = grouped[year];
+    const avg = grouped[year].reduce((acc, val) => acc + val, 0) / grouped[year].length;
+    if (
+      avg > highestAvg ||
+      (avg === highestAvg && (bestYear === null || Number(year) < Number(bestYear)))
+    ) {
+      highestAvg = avg;
       bestYear = year;
     }
   }
-  return `The best year is ${bestYear} with a score of ${highestAvg}`;
+  return `The best year was ${bestYear} with an average score of ${highestAvg.toFixed(1)}`;
 }
 
 
